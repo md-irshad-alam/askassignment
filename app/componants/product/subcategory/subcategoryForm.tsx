@@ -26,9 +26,10 @@ const SubcategoryForm = ({ initialData }: any) => {
   const handleSave = async (event: any) => {
     event.preventDefault();
     try {
-      let res = await fetchWithAuth("/api/product/subcategory", "POST", {
+      const res = await fetchWithAuth("/api/product/subcategory", "POST", {
         body: JSON.stringify(inputField),
       }).then((response) => {
+        console.log("response", response);
         fetchData();
         window.alert("Successfully added category");
       });
@@ -38,7 +39,7 @@ const SubcategoryForm = ({ initialData }: any) => {
   };
   const fetchData = async () => {
     try {
-      let res = await fetchWithAuth("/api/product/subcategory");
+      const res = await fetchWithAuth("/api/product/subcategory");
       setsubCategorydata(res.flat(Infinity));
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -47,7 +48,7 @@ const SubcategoryForm = ({ initialData }: any) => {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        let data = await fetchWithAuth("/api/product/category");
+        const data = await fetchWithAuth("/api/product/category");
         setCategoryData(data);
       } catch (error) {
         console.error("Error fetching categories:", error);

@@ -2,8 +2,6 @@
 import {
   Button,
   Checkbox,
-  Container,
-  FormControl,
   FormControlLabel,
   Grid,
   InputLabel,
@@ -24,9 +22,10 @@ const CategoryForm = ({ initialData }: any) => {
   const handleSave = async (event: any) => {
     event.preventDefault();
     try {
-      let res = await fetchWithAuth("/api/product/category", "POST", {
+      await fetchWithAuth("/api/product/category", "POST", {
         body: JSON.stringify(inputField),
       }).then((response) => {
+        console.log("Successfully added category", response);
         fetchData();
         window.alert("Successfully added category");
       });
@@ -36,7 +35,7 @@ const CategoryForm = ({ initialData }: any) => {
   };
   const fetchData = async () => {
     try {
-      let res = await fetchWithAuth("/api/product/category");
+      const res = await fetchWithAuth("/api/product/category");
       setCategorydata(res);
     } catch (error) {
       console.error("Error fetching categories:", error);

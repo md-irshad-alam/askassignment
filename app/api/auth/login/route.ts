@@ -1,17 +1,17 @@
 import AuthModel from "@/app/models/authSchema";
 import bcrypt from "bcryptjs";
 import dbconnection from "@/app/lib/dbconnection";
-import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method Not Allowed" });
+    return NextResponse.json({ message: "Method Not Allowed" });
   }
   await dbconnection();
   try {
     const body = await req.json();
-    const { email, password }: any = body;
+    const { email, password } = body;
 
     if (!email || !password) {
       return NextResponse.json(
@@ -27,6 +27,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if (!isMathc) {
       return NextResponse.json({ error: "Invalid password" }, { status: 401 });
     }
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not defined");
+    }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
@@ -41,17 +44,21 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return response;
   } catch (error) {
     console.log("registration faild", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
+
 // get the user details
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   if (req.method !== "GET") {
-    return res.status(405).json({ message: "Method Not Allowed" });
+    return NextResponse.json({ message: "Method Not Allowed" });
   }
   await dbconnection();
   try {
-    const tokenCookie = cookies().get("token");
+    const tokenCookie = (await cookies()).get("token");
     if (!tokenCookie || !tokenCookie.value) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -59,12 +66,22 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const token = tokenCookie.value;
     console.log("Token:", token);
 
-    const { id }: any = jwt.verify(token, process.env.JWT_SECRET);
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not defined");
+    }
+    const decodedToken = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    ) as jwt.JwtPayload;
+    const id = decodedToken.id;
     const user = await AuthModel.findById(id).select("-password");
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
     console.log("registration faild", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
 

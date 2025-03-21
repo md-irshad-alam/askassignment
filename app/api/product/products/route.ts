@@ -57,25 +57,25 @@ export async function POST(req: Request) {
       { message: "Product created successfully", product: newProduct },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Product Creation Error:", error);
     return NextResponse.json(
-      { error: error.message || "Internal Server Error" },
+      { error: error || "Internal Server Error" },
       { status: 500 }
     );
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     // ✅ Fetch all products
     await dbconnection();
     const products = await productModel.find();
     return NextResponse.json({ products });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Product Fetch Error:", error);
     return NextResponse.json(
-      { error: error.message || "Internal Server Error" },
+      { error: (error as Error).message || "Internal Server Error" },
       { status: 500 }
     );
   }

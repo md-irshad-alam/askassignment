@@ -88,10 +88,11 @@ const AddProductForm = ({ renderForm }: any) => {
     };
 
     try {
-      let res = await fetchWithAuth("/api/product/products", "POST", {
+      const res = await fetchWithAuth("/api/product/products", "POST", {
         body: JSON.stringify(productData),
       })
         .then((response) => {
+          console.log("Product added successfully:", response);
           window.alert("Product added successfully");
           renderForm(true);
         })

@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "./componants/navbar/navbar";
+
 export default function Dashboard() {
   return (
     <div

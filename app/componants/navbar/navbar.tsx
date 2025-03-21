@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import AppBar from "@mui/material/AppBar";
+
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -8,20 +8,11 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import { IconLogout } from "@tabler/icons-react";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-} from "@mui/material";
+import { Box } from "@mui/material";
 // import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { IconChevronDown } from "@tabler/icons-react";
 import Link from "next/link";
-import Router from "next/router";
 import { fetchWithAuth } from "@/app/utils/fetchUtils";
-
 const Navbar = () => {
-  const [hover, setHover] = useState(false);
   const [user, setUser] = React.useState<any>(null);
   React.useEffect(() => {
     const getDetails = async () => {
@@ -32,7 +23,7 @@ const Navbar = () => {
     };
     getDetails();
   }, []);
-  console.log("user", user);
+
   const handleLogout = async () => {
     try {
       await fetchWithAuth("/api/auth/logout", "POST");

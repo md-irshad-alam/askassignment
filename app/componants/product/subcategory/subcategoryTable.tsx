@@ -44,7 +44,7 @@ export default function CategoryTable({ initialData }: any) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows?.map((row: any, index) => (
+          {rows?.map((row: any, index: any) => (
             <StyledTableRow key={index}>
               <StyledTableCell component="th" scope="row">
                 {row.category}

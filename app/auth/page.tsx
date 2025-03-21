@@ -9,9 +9,8 @@ import {
   Paper,
   IconButton,
   InputAdornment,
-  Box,
 } from "@mui/material";
-// import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 import { IconEyeClosed } from "@tabler/icons-react";
 import { IconEyeDotted } from "@tabler/icons-react";
 

@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import CategoryForm from "../componants/product/category/categoryForm";
 import SubcategoryForm from "../componants/product/subcategory/subcategoryForm";
 import AddProductForm from "../componants/product/product/productForm";
-import { fetchWithAuth } from "../utils/fetchUtils";
+
 import ProductTable from "../componants/product/product/productTable";
 
 interface TabPanelProps {
@@ -41,8 +41,7 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
-  const [category, setCategory] = React.useState([]);
-  const [subcategory, setSubcategory] = React.useState([]);
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };

@@ -1,21 +1,20 @@
 import AuthModel from "@/app/models/authSchema";
 import bcrypt from "bcryptjs";
 import dbconnection from "@/app/lib/dbconnection";
-type registerType = {
-  email: string;
-  password: string;
-  name: string;
-};
+
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method Not Allowed" });
+    return NextResponse.json(
+      { message: "Method Not Allowed" },
+      { status: 405 }
+    );
   }
   await dbconnection();
   try {
     const body = await req.json();
-    const { name, email, password }: any = body;
+    const { name, email, password } = body;
 
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -40,7 +39,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json({ user }, { status: 201 });
   } catch (error) {
     console.log("registration faild", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
 
