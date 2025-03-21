@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AskAssignment
 
-## Getting Started
+## Project Overview
+AskAssignment is a web-based platform that provides user authentication and product management features. The platform allows users to sign up, log in securely, manage categories and subcategories, add products, and upload files and images.
 
-First, run the development server:
+## Features
+- **User Authentication**: Secure login and signup with password encryption.
+- **Category Management**: Create and manage categories and subcategories.
+- **Product Management**: Add, update, and delete products.
+- **File & Image Upload**: Supports file and image uploads.
+- **JWT Authentication**: Secure API endpoints using JSON Web Tokens (JWT).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Technologies Used
+- **Next.js**: React-based framework for server-side rendering and static site generation.
+- **Multer**: Middleware for handling file uploads.
+- **MongoDB**: NoSQL database for storing user and product data.
+- **Mongoose**: ODM (Object Data Modeling) library for MongoDB.
+- **JSON Web Token (JWT)**: Authentication mechanism for securing API requests.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation & Setup
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/md-irshad-alam/askassignment.git
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd askassignment
+   ```
+3. Install dependencies:
+   ```sh
+   npm install
+   ```
+4. Set up environment variables:
+   - Create a `.env.local` file in the root directory and add the necessary environment variables.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+5. Start the development server:
+   ```sh
+   npm run dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## API Endpoints
+- **User Authentication**
+  - `POST /api/auth/signup` - Register a new user
+  - `POST /api/auth/login` - Log in with email and password
+- **Category Management**
+  - `POST /api/category` - Create a new category
+  - `GET /api/category` - Retrieve all categories
+- **Product Management**
+  - `POST /api/product` - Add a new product
+  - `GET /api/product` - Retrieve all products
+- **File Upload**
+  - `POST /api/upload` - Upload images or files
 
-## Learn More
+## Contribution
+Feel free to fork this repository, make improvements, and submit a pull request.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+This project is licensed under the MIT License.
