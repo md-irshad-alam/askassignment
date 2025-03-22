@@ -20,7 +20,7 @@ const AddProductForm = ({ renderForm }: any) => {
   const [productname, setProductName] = useState("");
   const [shortdesc, setshortdesc] = useState("");
   const [pdfheading, setpdfheaind] = useState("");
-  const [image, setImageUrl] = useState("");
+  const [image, setImageUrl] = useState("/screenshoot.png");
   const [pdfUrl, setPdfUrl] = useState("");
   const [uploadfile, setUploadFile] = useState<
     { heading: string; fileurl: string }[]
@@ -51,6 +51,8 @@ const AddProductForm = ({ renderForm }: any) => {
         setPdfUrl(fileUrl);
       }
     } catch (error) {
+      setImageUrl("/screenshoot.png");
+      setPdfUrl("/screensh.pdf");
       console.error("File upload failed:", error);
     }
   };
@@ -73,12 +75,6 @@ const AddProductForm = ({ renderForm }: any) => {
     setFeatureContents([{ content: event.target.value }]);
   };
 
-  const handleUploadFile = (event: any) => {
-    const newData = { heading: event.target.value, fileurl: pdfUrl || "" };
-    console.log("Upload", newData);
-    setUploadFile([newData]);
-  };
-
   // Handle form submission
   const handleSubmit = async () => {
     const productData = {
@@ -86,9 +82,9 @@ const AddProductForm = ({ renderForm }: any) => {
       subcategory,
       productname,
       shortdesc,
-      image,
+      image: image,
       desc,
-      uploadfile: [{ heading: pdfheading, fileurl: pdfUrl || "" }],
+      uploadfile: [{ heading: pdfheading, fileurl: pdfUrl }],
       feature: featureContents,
     };
 
