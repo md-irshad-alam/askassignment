@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const authToken = req.cookies.get("authToken")?.value; // Get token from cookies
+  const authToken = req.cookies.get("token")?.value; // Get token from cookies
 
   // If user is NOT logged in, redirect to login page
   if (!authToken) {

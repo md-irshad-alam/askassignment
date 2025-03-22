@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { IconEdit } from "@tabler/icons-react";
 import { IconTrash } from "@tabler/icons-react";
+import { fetchWithAuth } from "@/app/utils/fetchUtils";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -36,11 +37,24 @@ interface RowData {
 
 interface CategoryTableProps {
   initialData: RowData[];
+  setCategories: React.Dispatch<React.SetStateAction<RowData[]>>;
+  handleUpdate: React.Dispatch<React.SetStateAction<RowData[]>>;
 }
 export const CategoryTable: React.FC<CategoryTableProps> = ({
   initialData,
+  setCategories,
+  handleUpdate,
 }) => {
   const rows = initialData || [{}];
+  const handleDelete = async (id: string) => {
+    // delete api call
+    await fetchWithAuth(`/api/product/category`, "DELETE", {
+      body: JSON.stringify({ id }),
+    });
+    // update the state
+    setCategories(initialData.filter((c: any) => c._id !== id));
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -62,11 +76,15 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
                 {row.isActive == true ? "Active" : "De-Active"}
               </StyledTableCell>
 
-              <StyledTableCell align="center">
+              <StyledTableCell align="center" onClick={() => handleUpdate(row)}>
                 <IconEdit color="blue" />
               </StyledTableCell>
 
-              <StyledTableCell align="center">
+              <StyledTableCell
+                align="center"
+                className="cursor-pointer"
+                onClick={() => handleDelete(row._id)}
+              >
                 <IconTrash color="red" />
               </StyledTableCell>
             </StyledTableRow>

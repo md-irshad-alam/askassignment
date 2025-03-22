@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -14,21 +14,17 @@ import {
 import axios from "axios";
 import { fetchWithAuth } from "@/app/utils/fetchUtils";
 
-type categoryProps = {
-  _id: string;
-  renderForm: (value: boolean) => void;
-  category: string;
-  subCategory: string;
-};
-const AddProductForm: React.FC<categoryProps> = ({ renderForm }) => {
+const AddProductForm = ({ renderForm }: any) => {
   const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
-  const [productName, setProductName] = useState("");
-  const [shortDescription, setShortDescription] = useState("");
-
+  const [subcategory, setSubCategory] = useState("");
+  const [productname, setProductName] = useState("");
+  const [shortdesc, setshortdesc] = useState("");
+  const [pdfheading, setpdfheaind] = useState("");
   const [image, setImageUrl] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
-
+  const [uploadfile, setUploadFile] = useState<
+    { heading: string; fileurl: string }[]
+  >([]);
   // Function to handle file upload
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -58,6 +54,7 @@ const AddProductForm: React.FC<categoryProps> = ({ renderForm }) => {
       console.error("File upload failed:", error);
     }
   };
+  console.log("pdf file name ", pdfUrl);
   const [desc, setDescription] = useState({
     title: "",
     heading: "",
@@ -75,23 +72,23 @@ const AddProductForm: React.FC<categoryProps> = ({ renderForm }) => {
   ) => {
     setFeatureContents([{ content: event.target.value }]);
   };
-  const [uploadfile, setUploadFile] = useState<
-    { heading: string; fileurl: string }[]
-  >([]);
-  const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleUploadFile = (event: any) => {
     const newData = { heading: event.target.value, fileurl: pdfUrl || "" };
+    console.log("Upload", newData);
     setUploadFile([newData]);
   };
+
   // Handle form submission
   const handleSubmit = async () => {
     const productData = {
       category,
-      subCategory,
-      productName,
-      shortDescription,
+      subcategory,
+      productname,
+      shortdesc,
       image,
       desc,
-      uploadfile,
+      uploadfile: [{ heading: pdfheading, fileurl: pdfUrl || "" }],
       feature: featureContents,
     };
 
@@ -116,7 +113,7 @@ const AddProductForm: React.FC<categoryProps> = ({ renderForm }) => {
     // Send `productData` to backend API here
   };
 
-  const [subCategoryData, setSubCategoryData] = useState<categoryProps[]>([]);
+  const [subCategoryData, setSubCategoryData] = useState([]);
   useEffect(() => {
     const getSubCategory = async () => {
       try {
@@ -157,8 +154,8 @@ const AddProductForm: React.FC<categoryProps> = ({ renderForm }) => {
           <InputLabel>Select Sub Category</InputLabel>
           <FormControl fullWidth>
             <Select
-              name="subCategory"
-              value={subCategory}
+              name="subcategory"
+              value={subcategory}
               onChange={(e) => setSubCategory(e.target.value)}
             >
               {subCategoryData?.map((subCategory) => (
@@ -174,9 +171,8 @@ const AddProductForm: React.FC<categoryProps> = ({ renderForm }) => {
           <InputLabel>Product Name</InputLabel>
           <TextField
             fullWidth
-            label="Product Name"
             variant="outlined"
-            value={productName}
+            value={productname}
             onChange={(e) => setProductName(e.target.value)}
           />
         </Grid>
@@ -201,8 +197,8 @@ const AddProductForm: React.FC<categoryProps> = ({ renderForm }) => {
             minRows={3}
             style={{ width: "100%" }}
             className="border"
-            value={shortDescription}
-            onChange={(e) => setShortDescription(e.target.value)}
+            value={shortdesc}
+            onChange={(e) => setshortdesc(e.target.value)}
           />
         </Grid>
       </Grid>
@@ -272,7 +268,7 @@ const AddProductForm: React.FC<categoryProps> = ({ renderForm }) => {
             placeholder="PDF Heading"
             variant="outlined"
             name="heading"
-            onChange={handleUploadFile}
+            onChange={(event: any) => setpdfheaind(event.target.value)}
           />
         </Grid>
         <Grid item xs={6}>

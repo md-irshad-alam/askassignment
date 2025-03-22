@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { IconEdit } from "@tabler/icons-react";
 import { IconTrash } from "@tabler/icons-react";
+import { fetchWithAuth } from "@/app/utils/fetchUtils";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -26,6 +27,8 @@ interface RowData {
 
 interface CategoryTableProps {
   initialData: RowData[];
+  onEdit?: (item: any) => void;
+  subCategory: string;
 }
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -39,9 +42,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export const SubCategoryTable: React.FC<CategoryTableProps> = ({
   initialData,
+  onEdit,
+  subCategory,
 }) => {
   const rows = initialData || [{}];
   console.log("rows", rows);
+  const handleDelete = async (id: string) => {
+    // delete api call
+    await fetchWithAuth(`/api/product/subcategory`, "DELETE", {
+      body: JSON.stringify({ id }),
+    });
+    // update the state
+    subCategory(initialData.filter((c: any) => c._id !== id));
+  };
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -66,11 +79,19 @@ export const SubCategoryTable: React.FC<CategoryTableProps> = ({
                 {row.isActive == true ? "Active" : "De-Active"}
               </StyledTableCell>
 
-              <StyledTableCell align="center">
+              <StyledTableCell
+                align="center"
+                className="cursor-pointer"
+                onClick={() => onEdit(row)}
+              >
                 <IconEdit color="blue" />
               </StyledTableCell>
 
-              <StyledTableCell align="center">
+              <StyledTableCell
+                align="center"
+                className="cursor-pointer"
+                onClick={() => handleDelete(row._id)}
+              >
                 <IconTrash color="red" />
               </StyledTableCell>
             </StyledTableRow>

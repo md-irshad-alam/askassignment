@@ -22,6 +22,7 @@ interface InputField {
 }
 
 interface Category {
+  id: string;
   _id: string;
   subCategory: string;
   category: string;
@@ -29,17 +30,13 @@ interface Category {
 
 const SubcategoryForm = () => {
   const [inputField, setIputField] = useState<InputField>({});
-  const handleChagne = (
-    event: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>
-  ) => {
+  const handleChagne = (event: any) => {
     setIputField({
       ...inputField,
-      [event.target.name as string]: event.target.value,
+      [event.target.name]: event.target.value,
     });
   };
   console.log(inputField);
-  const [subCategopryData, setsubCategorydata] = useState<any[]>([]);
-  const [categoryData, setCategoryData] = useState<Category[]>([]);
   const handleSave = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     try {
@@ -54,6 +51,8 @@ const SubcategoryForm = () => {
       console.error("Error fetching categories:", error);
     }
   };
+  const [subCategopryData, setsubCategorydata] = useState<any[]>([]);
+  const [categoryData, setCategoryData] = useState<Category[]>([]);
   const fetchData = async () => {
     try {
       const res = await fetchWithAuth("/api/product/subcategory");
@@ -74,6 +73,33 @@ const SubcategoryForm = () => {
     fetchData();
     getCategory();
   }, []);
+  const [isEdit, setIsEdit] = useState(false);
+  const handleEditChange = (item: any) => {
+    if (item) {
+      setIputField({
+        id: item._id,
+        category: item.category,
+        subCategory: item.subCategory,
+        isActive: item.isActive,
+      });
+      setIsEdit(true);
+    }
+  };
+  const handleUpdate = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    try {
+      await fetchWithAuth(`/api/product/subcategory`, "PUT", {
+        body: JSON.stringify(inputField),
+      }).then((response) => {
+        console.log("response", response);
+        fetchData();
+        window.alert("Successfully updated category");
+        setIsEdit(false);
+      });
+    } catch (error) {
+      console.error("Error updating category:", error);
+    }
+  };
   return (
     <div className=" shadow-lg p-4 mt-12">
       <>
@@ -82,9 +108,8 @@ const SubcategoryForm = () => {
             <InputLabel>Select Category </InputLabel>
             <Select
               name="category"
-              onChange={(event) =>
-                handleChagne(event as SelectChangeEvent<string>)
-              }
+              onChange={handleChagne}
+              value={inputField?.category}
               fullWidth
             >
               {categoryData?.map((item) => (
@@ -98,14 +123,16 @@ const SubcategoryForm = () => {
             <InputLabel>Sub Category name</InputLabel>
             <TextField
               type="text"
+              value={inputField?.subCategory}
               name="subCategory"
-              onChange={() => handleChagne}
+              onChange={handleChagne}
               fullWidth
             />
           </Grid>
           <Grid item xs={3} mt={4}>
             <FormControlLabel
               name="isActive"
+              value={inputField?.isActive}
               control={
                 <Checkbox
                   onChange={(event) => {
@@ -121,16 +148,30 @@ const SubcategoryForm = () => {
           </Grid>
 
           <Grid item xs={12} className="flex justify-end mt-3 gap-x-4">
-            <Button variant="contained" color="primary" onClick={handleSave}>
-              Save Category
-            </Button>
+            {isEdit ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleUpdate}
+              >
+                Update Category
+              </Button>
+            ) : (
+              <Button variant="contained" color="primary" onClick={handleSave}>
+                Save Category
+              </Button>
+            )}
 
             <Button variant="contained" color="secondary">
               Cancel
             </Button>
           </Grid>
           <Grid item xs={12} mt={4}>
-            <SubCategoryTable initialData={subCategopryData} />
+            <SubCategoryTable
+              initialData={subCategopryData}
+              subCategory={setsubCategorydata}
+              onEdit={handleEditChange}
+            />
           </Grid>
         </Grid>
         <br />

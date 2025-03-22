@@ -7,8 +7,7 @@ import Box from "@mui/material/Box";
 import CategoryForm from "../componants/product/category/categoryForm";
 import SubcategoryForm from "../componants/product/subcategory/subcategoryForm";
 import AddProductForm from "../componants/product/product/productForm";
-
-import ProductTable from "../componants/product/product/productTable";
+import { ProductTable } from "../componants/product/product/productTable";
 
 interface TabPanelProps {
   children?: React.ReactNode;

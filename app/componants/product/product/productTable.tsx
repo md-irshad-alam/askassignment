@@ -30,23 +30,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-type ProductTableProps = {
-  renderForm: (value: boolean) => void;
-  category: string;
-  subcategory: string;
-  productname: string;
-  price: number;
-  shortDescription: string;
-  desc: {
-    content: string;
-    heading: string;
-    title: string;
-  }[];
-  isActive: boolean;
-};
+// type ProductTableProps = {
+//   renderForm: (value: boolean) => void;
+//   category: string;
+//   subcategory: string;
+//   productname: string;
+//   price: number;
+//   shortDescription: string;
+//   desc: {
+//     content: string;
+//     heading: string;
+//     title: string;
+//   }[];
+//   isActive: boolean;
+// };
 
-export const ProductTable: React.FC<ProductTableProps> = ({ renderForm }) => {
-  const [rows, setRows] = React.useState<ProductTableProps[]>([]);
+export const ProductTable = ({ renderForm }: any) => {
+  const [rows, setRows] = React.useState([]);
   React.useEffect(() => {
     const getProducts = async () => {
       try {
@@ -61,6 +61,14 @@ export const ProductTable: React.FC<ProductTableProps> = ({ renderForm }) => {
     };
     getProducts();
   }, []);
+  const handleDelete = async (id: string) => {
+    // delete api call
+    await fetchWithAuth(`/api/product/products`, "DELETE", {
+      body: JSON.stringify({ id }),
+    });
+    // update the state
+    setRows(rows.filter((c: any) => c._id !== id));
+  };
   console.log(rows);
   return (
     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -94,7 +102,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ renderForm }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows?.map((row, index: number) => (
+              {rows?.map((row: any, index: number) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell align="center">
                     {row.category}
@@ -106,21 +114,25 @@ export const ProductTable: React.FC<ProductTableProps> = ({ renderForm }) => {
                     {row?.productname}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {row?.shortDescription}
+                    {row?.shortdesc}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {row?.desc?.map((item) => item.content)}
+                    {row?.desc?.map((item: any) => item.content)}
                   </StyledTableCell>
 
                   <StyledTableCell align="right">
                     {row.isActive == true ? "Active" : "De-Active"}
                   </StyledTableCell>
 
-                  <StyledTableCell align="center">
+                  <StyledTableCell align="center" className="cursor-pointer">
                     <IconEdit color="blue" />
                   </StyledTableCell>
 
-                  <StyledTableCell align="center">
+                  <StyledTableCell
+                    align="center"
+                    className="cursor-pointer"
+                    onClick={() => handleDelete(row._id)}
+                  >
                     <IconTrash color="red" />
                   </StyledTableCell>
                 </StyledTableRow>
