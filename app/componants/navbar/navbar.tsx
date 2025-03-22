@@ -6,14 +6,19 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+
 import { IconLogout } from "@tabler/icons-react";
 import { Box } from "@mui/material";
 // import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Link from "next/link";
 import { fetchWithAuth } from "@/app/utils/fetchUtils";
-const Navbar = () => {
-  const [user, setUser] = React.useState<any>(null);
+type userProps = {
+  name: string;
+
+  id: string;
+};
+const Navbar: React.FC<userProps> = () => {
+  const [user, setUser] = React.useState<userProps>({ name: "", id: "" });
   React.useEffect(() => {
     const getDetails = async () => {
       const res = await fetchWithAuth("/api/auth/login", "GET");

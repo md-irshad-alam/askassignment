@@ -18,7 +18,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+interface RowData {
+  category: string;
+  subCategory: string;
+  isActive: boolean;
+}
 
+interface CategoryTableProps {
+  initialData: RowData[];
+}
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
@@ -29,7 +37,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function CategoryTable({ initialData }: any) {
+export const SubCategoryTable: React.FC<CategoryTableProps> = ({
+  initialData,
+}) => {
   const rows = initialData || [{}];
   console.log("rows", rows);
   return (
@@ -38,13 +48,14 @@ export default function CategoryTable({ initialData }: any) {
         <TableHead>
           <TableRow>
             <StyledTableCell>Category</StyledTableCell>
+            <StyledTableCell>Sub Category</StyledTableCell>
             <StyledTableCell align="right">Status</StyledTableCell>
             <StyledTableCell align="right">Edit</StyledTableCell>
             <StyledTableCell align="right">Remove</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows?.map((row: any, index: any) => (
+          {rows?.map((row, index) => (
             <StyledTableRow key={index}>
               <StyledTableCell component="th" scope="row">
                 {row.category}
@@ -68,4 +79,4 @@ export default function CategoryTable({ initialData }: any) {
       </Table>
     </TableContainer>
   );
-}
+};

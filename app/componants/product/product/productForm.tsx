@@ -14,7 +14,13 @@ import {
 import axios from "axios";
 import { fetchWithAuth } from "@/app/utils/fetchUtils";
 
-const AddProductForm = ({ renderForm }: any) => {
+type categoryProps = {
+  _id: string;
+  renderForm: (value: boolean) => void;
+  category: string;
+  subCategory: string;
+};
+const AddProductForm: React.FC<categoryProps> = ({ renderForm }) => {
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [productName, setProductName] = useState("");
@@ -57,20 +63,22 @@ const AddProductForm = ({ renderForm }: any) => {
     heading: "",
     content: "",
   });
-  const handleDescription = (event: any) => {
+  const handleDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDescription({ ...desc, [event.target.name]: event.target.value });
   };
-  console.log(image);
+
   const [featureContents, setFeatureContents] = useState<
     { [key: string]: string }[]
   >([]);
-  const handleFeatureContent = (event: any) => {
+  const handleFeatureContent = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setFeatureContents([{ content: event.target.value }]);
   };
   const [uploadfile, setUploadFile] = useState<
     { heading: string; fileurl: string }[]
   >([]);
-  const handleUploadFile = (event: any) => {
+  const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { heading: event.target.value, fileurl: pdfUrl || "" };
     setUploadFile([newData]);
   };
@@ -88,7 +96,7 @@ const AddProductForm = ({ renderForm }: any) => {
     };
 
     try {
-      const res = await fetchWithAuth("/api/product/products", "POST", {
+      await fetchWithAuth("/api/product/products", "POST", {
         body: JSON.stringify(productData),
       })
         .then((response) => {
@@ -101,11 +109,14 @@ const AddProductForm = ({ renderForm }: any) => {
         });
 
       // Reset form inputs
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error adding product:", error);
+      window.alert("Error adding product: " + (error as Error).message);
+    }
     // Send `productData` to backend API here
   };
 
-  const [subCategoryData, setSubCategoryData] = useState([]);
+  const [subCategoryData, setSubCategoryData] = useState<categoryProps[]>([]);
   useEffect(() => {
     const getSubCategory = async () => {
       try {
@@ -176,7 +187,9 @@ const AddProductForm = ({ renderForm }: any) => {
             fullWidth
             type="file"
             inputProps={{ accept: "image/*" }}
-            onChange={(e) => handleFileUpload(e, "image")}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleFileUpload(e, "image")
+            }
             variant="outlined"
           />
           {image && <img src={image} alt="Uploaded" width="100" />}
@@ -268,7 +281,7 @@ const AddProductForm = ({ renderForm }: any) => {
             fullWidth
             type="file"
             inputProps={{ accept: ".pdf" }}
-            onChange={(e) => handleFileUpload(e, "pdf")}
+            onChange={(e: any) => handleFileUpload(e, "pdf")}
             variant="outlined"
           />
           {pdfUrl && (

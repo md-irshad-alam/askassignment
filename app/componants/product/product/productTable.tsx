@@ -30,9 +30,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
+type ProductTableProps = {
+  renderForm: (value: boolean) => void;
+  category: string;
+  subcategory: string;
+  productname: string;
+  price: number;
+  shortDescription: string;
+  desc: {
+    content: string;
+    heading: string;
+    title: string;
+  }[];
+  isActive: boolean;
+};
 
-export default function ProductTable({ renderForm }: any) {
-  const [rows, setRows] = React.useState([]);
+export const ProductTable: React.FC<ProductTableProps> = ({ renderForm }) => {
+  const [rows, setRows] = React.useState<ProductTableProps[]>([]);
   React.useEffect(() => {
     const getProducts = async () => {
       try {
@@ -80,7 +94,7 @@ export default function ProductTable({ renderForm }: any) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows?.map((row: any, index: any) => (
+              {rows?.map((row, index: number) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell align="center">
                     {row.category}
@@ -95,7 +109,7 @@ export default function ProductTable({ renderForm }: any) {
                     {row?.shortDescription}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {row?.desc?.map((item: any) => item.content)}
+                    {row?.desc?.map((item) => item.content)}
                   </StyledTableCell>
 
                   <StyledTableCell align="right">
@@ -117,4 +131,4 @@ export default function ProductTable({ renderForm }: any) {
       </div>
     </div>
   );
-}
+};

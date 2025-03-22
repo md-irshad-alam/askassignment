@@ -28,9 +28,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
+interface RowData {
+  category: string;
+  subCategory: string;
+  isActive: boolean;
+}
 
-export default function CategoryTable({ categoryData }: any) {
-  const rows = categoryData || [{}];
+interface CategoryTableProps {
+  initialData: RowData[];
+}
+export const CategoryTable: React.FC<CategoryTableProps> = ({
+  initialData,
+}) => {
+  const rows = initialData || [{}];
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -43,7 +53,7 @@ export default function CategoryTable({ categoryData }: any) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row: any, index: any) => (
+          {rows.map((row, index) => (
             <StyledTableRow key={index}>
               <StyledTableCell component="th" scope="row">
                 {row?.category}
@@ -65,4 +75,4 @@ export default function CategoryTable({ categoryData }: any) {
       </Table>
     </TableContainer>
   );
-}
+};

@@ -8,18 +8,32 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import CategoryTable from "./categoryTable";
+
 import { fetchWithAuth } from "@/app/utils/fetchUtils";
+import { CategoryTable } from "./categoryTable";
 
-const CategoryForm = ({ initialData }: any) => {
-  console.log(initialData);
-  const [inputField, setIputField] = useState({});
+interface InputField {
+  category?: string;
+  isActive?: boolean;
+}
 
-  const [categoryData, setCategorydata] = useState([]);
-  const handleChagne = (event: any) => {
+interface Category {
+  id: number;
+  category: string;
+  subCategory: string;
+  isActive: boolean;
+}
+
+const CategoryForm = () => {
+  //
+  const [inputField, setIputField] = useState<InputField>({});
+
+  const [categoryData, setCategorydata] = useState<Category[]>([]);
+  const handleChagne = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIputField({ ...inputField, [event.target.name]: event.target.value });
   };
-  const handleSave = async (event: any) => {
+
+  const handleSave = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     try {
       await fetchWithAuth("/api/product/category", "POST", {
@@ -86,7 +100,7 @@ const CategoryForm = ({ initialData }: any) => {
             </Button>
           </Grid>
           <Grid item xs={12} mt={4}>
-            <CategoryTable categoryData={categoryData} />
+            <CategoryTable initialData={categoryData} />
           </Grid>
         </Grid>
         <br />
