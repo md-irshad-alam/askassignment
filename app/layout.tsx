@@ -17,7 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="">
         <Navbar />
-        <div className="w-[80%] m-auto">{children}</div>
+        <div className=" sm:w-full md:w-[80%] lg:w-[80%] m-auto">
+          {children}
+        </div>
       </body>
     </html>
   );

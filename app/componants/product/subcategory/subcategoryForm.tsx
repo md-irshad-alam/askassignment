@@ -129,7 +129,7 @@ const SubcategoryForm = () => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={3} mt={4}>
+          <Grid item xs={3} className="mt-4 sm:mt-0">
             <FormControlLabel
               name="isActive"
               value={inputField?.isActive}

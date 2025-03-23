@@ -103,24 +103,8 @@ const CategoryForm = () => {
               fullWidth
             />
           </Grid>
-          {/* <Grid item xs={3} mt={4}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  value={inputField.isActive}
-                  name="isActive"
-                  onChange={(event) => {
-                    setIputField({
-                      ...inputField,
-                      [event.target.name]: event.target.checked,
-                    });
-                  }}
-                />
-              }
-              label="Active"
-            />
-          </Grid> */}
-          <Grid item xs={3} mt={4}>
+
+          <Grid item xs={6} mt={4}>
             <FormControlLabel
               name="isActive"
               value={inputField?.isActive}
