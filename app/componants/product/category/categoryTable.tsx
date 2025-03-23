@@ -73,7 +73,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
                 {row?.category}
               </StyledTableCell>
               <StyledTableCell align="right">
-                {row.isActive == true ? "Active" : "De-Active"}
+                {row.isActive == "true" ? "Active" : "De-Active"}
               </StyledTableCell>
 
               <StyledTableCell align="center" onClick={() => handleUpdate(row)}>

@@ -44,7 +44,7 @@ export default function BasicTabs() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const [renderForm, setRenderForm] = React.useState(false);
+  const [renderForm, setRenderForm] = React.useState(true);
 
   return (
     <Box sx={{ width: "100%" }}>
