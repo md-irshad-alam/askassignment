@@ -6,7 +6,7 @@ export function middleware(req: NextRequest) {
 
   // If user is NOT logged in, redirect to login page
   if (!authToken) {
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+    return NextResponse.redirect(new URL("/auth", req.url));
   }
 
   return NextResponse.next(); // Allow the request to proceed
